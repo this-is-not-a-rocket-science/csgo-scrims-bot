@@ -7,7 +7,10 @@ type Command = 'help' | 'test';
 export class Bot {
   client: Client;
   prefix: string = 'cs!';
-  commands: Collection<Command, (message: Message, args: any) => void> = new Collection();
+  commands: Collection<
+    Command,
+    (message: Message, args: any) => void
+  > = new Collection();
 
   constructor() {
     this.client = new Client();
@@ -26,13 +29,19 @@ export class Bot {
   }
 
   test = async (message: Message, args: any) => {
-    message.reply('test')
-  }
+    message.reply('test');
+  };
 
   help = async (message: Message, args: any) => {
-    const availableCommands = this.commands.keyArray().map(c => `${this.prefix}${c}`);
-    await message.channel.send(`Here's a list of all available commands: \`${availableCommands.join(', ')}\``);
-  }
+    const availableCommands = this.commands
+      .keyArray()
+      .map((c) => `${this.prefix}${c}`);
+    await message.channel.send(
+      `Here's a list of all available commands: \`${availableCommands.join(
+        ', '
+      )}\``
+    );
+  };
 
   registerCommands() {
     this.commands.set('test', this.test);
@@ -54,13 +63,17 @@ export class Bot {
       commandO,
       O.fold(
         () => {
-          console.error('Failed to extract the command from the message')
+          console.error('Failed to extract the command from the message');
         },
         (command) => {
           if (!this.commands.has(command)) {
-            console.error(`called "cs!${command}": command "${command}" is not defined or not registered`);
+            console.error(
+              `called "cs!${command}": command "${command}" is not defined or not registered`
+            );
             message.react(`❓`);
-            message.reply("send `cs!help` to get the list of all available commands");
+            message.reply(
+              'send `cs!help` to get the list of all available commands'
+            );
           }
 
           const run = this.commands.get(command);
@@ -68,6 +81,7 @@ export class Bot {
             run(message, args);
           }
         }
-      ))
-  }
+      )
+    );
+  };
 }
