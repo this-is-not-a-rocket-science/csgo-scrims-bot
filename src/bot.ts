@@ -19,12 +19,14 @@ export class Bot {
     Command,
     (message: Message, args: string[]) => void
   > = new Collection();
-  users: User[] = [{
-    name: 'test user',
-    steamUsername: 'username',
-    steamUrl: 'www.ru',
-    id: '123123'
-  }]
+  users: User[] = [
+    {
+      name: 'test user',
+      steamUsername: 'username',
+      steamUrl: 'www.ru',
+      id: '123123',
+    },
+  ];
 
   constructor() {
     this.client = new Client();
@@ -53,17 +55,18 @@ export class Bot {
       steamUrl,
       steamUsername: steamUrl, // to extract
       id: steamUrl, // to extract
-    })
+    });
   };
 
   listUsers = async (message: Message, args: string[]) => {
-    message.channel.send(`
+    message.channel.send(
+      `
     \`\`\`json
       ${JSON.stringify(this.users, null, '  ')}
     \`\`\`
-    `.trim());
+    `.trim()
+    );
   };
-
 
   help = async (message: Message, args: string[]) => {
     try {
@@ -98,8 +101,11 @@ export class Bot {
 
     const args = message.content.slice(this.prefix.length).trim().split(/ +/);
     if (!args.length) {
-      console.error(`extracting arguments: Failed to extract arguments from message: "${message}"`)
-      return
+      console.error(
+        `extracting arguments: Failed to extract arguments from message: "${message}"`
+      );
+
+      return;
     }
 
     const commandO = O.fromNullable(args.shift()?.toLowerCase() as Command);
@@ -116,7 +122,10 @@ export class Bot {
               `called "cs!${command}": command "${command}" is not defined or not registered`
             );
 
-            await this.commandFailureHandler({ message, reply: `Unknown command \`${this.prefix}${command}\` Send \`cs!help\` to get the list of all available commands` });
+            await this.commandFailureHandler({
+              message,
+              reply: `Unknown command \`${this.prefix}${command}\` Send \`cs!help\` to get the list of all available commands`,
+            });
           }
 
           const run = this.commands.get(command);
@@ -128,7 +137,13 @@ export class Bot {
     );
   };
 
-  private async commandFailureHandler({ message, reply }: { message: Message, reply?: string }) {
+  private async commandFailureHandler({
+    message,
+    reply,
+  }: {
+    message: Message;
+    reply?: string;
+  }) {
     await message.react(`❓`);
     if (reply) {
       await message.reply(reply);
