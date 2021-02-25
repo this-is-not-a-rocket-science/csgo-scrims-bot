@@ -2,9 +2,10 @@ import { Message } from 'discord.js';
 import Container from 'typedi';
 import { config } from '../../config';
 import { CommandService } from '../../services/CommandService';
+import { CommandHandler } from '../types';
 import { commandFailureHandler } from '../utils';
 
-export const help = async (message: Message) => {
+export const help: CommandHandler = async (message: Message) => {
   const { prefix } = config;
   const { commands } = Container.get(CommandService);
   try {

@@ -68,6 +68,8 @@ export class BotService {
             });
           }
 
+          // TODO: parse the args
+
           const run = this.commandService.commands.get(command);
           if (run) {
             run(message, args);
