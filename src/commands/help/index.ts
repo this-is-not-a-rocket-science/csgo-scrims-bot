@@ -1,15 +1,14 @@
 import { Message } from 'discord.js';
 import Container from 'typedi';
-import { CommandService } from './CommandService';
-import { BotConfig } from './config/types';
+import { config } from '../../config';
+import { CommandService } from '../CommandService';
+import { commandFailureHandler } from '../utils';
 
 export const help = async (message: Message) => {
-  const { prefix } = Container.get(BotConfig);
+  const { prefix } = config;
   const { commands } = Container.get(CommandService);
   try {
-    const availableCommands = commands
-      .keyArray()
-      .map((c) => `${this.prefix}${c}`);
+    const availableCommands = commands.keyArray().map((c) => `${prefix}${c}`);
 
     await message.channel.send(
       `Here's a list of all available commands: \`${availableCommands.join(
@@ -17,6 +16,6 @@ export const help = async (message: Message) => {
       )}\``
     );
   } catch (e) {
-    await this.commandFailureHandler({ message });
+    await commandFailureHandler({ message });
   }
 };

@@ -1,11 +1,12 @@
-import { Message, Client, Collection } from 'discord.js';
+import { Message, Client } from 'discord.js';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
-import { Service } from 'typedi';
+import { Inject, Service } from 'typedi';
 import { CommandService } from './commands/CommandService';
 import { Command } from './commands/types/Command';
 import { help } from './commands/help';
 import { config } from './config';
+import { commandFailureHandler } from './commands/utils';
 
 interface User {
   name: string;
@@ -68,7 +69,7 @@ export class Bot {
               `called "cs!${command}": command "${command}" is not defined or not registered`
             );
 
-            await this.commandFailureHandler({
+            await commandFailureHandler({
               message,
               reply: `Unknown command \`${config.prefix}${command}\` Send \`cs!help\` to get the list of all available commands`,
             });
@@ -82,17 +83,4 @@ export class Bot {
       )
     );
   };
-
-  private async commandFailureHandler({
-    message,
-    reply,
-  }: {
-    message: Message;
-    reply?: string;
-  }) {
-    await message.react(`❓`);
-    if (reply) {
-      await message.reply(reply);
-    }
-  }
 }
