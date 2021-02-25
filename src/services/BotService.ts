@@ -1,9 +1,10 @@
 import { Message, Client } from 'discord.js';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
-import { Inject, Service } from 'typedi';
+import { Service } from 'typedi';
+import * as yargs from 'yargs';
 import { CommandService } from './CommandService';
-import type { Command } from '../commands';
+import { Command, commands } from '../commands';
 import { help } from '../commands/help';
 import { config } from '../config';
 import { commandFailureHandler } from '../commands/utils';
@@ -29,7 +30,9 @@ export class BotService {
   }
 
   registerCommands() {
-    this.commandService.commands.set('help', help);
+    Object.entries(commands).forEach(([name, handler]) => {
+      this.commandService.commands.set(name as Command, handler);
+    });
   }
 
   onMessage = (message: Message) => {
@@ -67,8 +70,6 @@ export class BotService {
               reply: `Unknown command \`${config.prefix}${command}\` Send \`cs!help\` to get the list of all available commands`,
             });
           }
-
-          // TODO: parse the args
 
           const run = this.commandService.commands.get(command);
           if (run) {
