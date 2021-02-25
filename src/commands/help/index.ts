@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import Container from 'typedi';
 import { config } from '../../config';
-import { CommandService } from '../CommandService';
+import { CommandService } from '../../services/CommandService';
 import { commandFailureHandler } from '../utils';
 
 export const help = async (message: Message) => {

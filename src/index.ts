@@ -1,13 +1,16 @@
 import 'reflect-metadata';
 import * as dotenv from 'dotenv';
-import { Bot } from './bot';
 import Container from 'typedi';
+import { BotService } from './services/BotService';
 
 dotenv.config();
 
 async function start() {
-  const bot = Container.get(Bot);
-  await bot.start();
+  try {
+    await Container.get(BotService).start();
+  } catch (e) {
+    console.error('start: failed to start the bot', e);
+  }
 }
 
 start();

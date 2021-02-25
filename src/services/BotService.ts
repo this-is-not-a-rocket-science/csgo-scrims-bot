@@ -2,11 +2,11 @@ import { Message, Client } from 'discord.js';
 import * as O from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
 import { Inject, Service } from 'typedi';
-import { CommandService } from './commands/CommandService';
-import { Command } from './commands/types/Command';
-import { help } from './commands/help';
-import { config } from './config';
-import { commandFailureHandler } from './commands/utils';
+import { CommandService } from './CommandService';
+import type { Command } from '../commands';
+import { help } from '../commands/help';
+import { config } from '../config';
+import { commandFailureHandler } from '../commands/utils';
 
 interface User {
   name: string;
@@ -16,7 +16,7 @@ interface User {
 }
 
 @Service()
-export class Bot {
+export class BotService {
   client: Client;
 
   constructor(public commandService: CommandService) {

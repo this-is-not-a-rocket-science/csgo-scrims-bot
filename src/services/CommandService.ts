@@ -1,6 +1,6 @@
 import { Collection, Message } from 'discord.js';
 import { Service } from 'typedi';
-import { Command } from './types/Command';
+import type { Command } from '../commands';
 
 @Service()
 export class CommandService {
