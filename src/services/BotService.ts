@@ -8,13 +8,6 @@ import { help } from '../commands/help';
 import { config } from '../config';
 import { commandFailureHandler } from '../commands/utils';
 
-interface User {
-  name: string;
-  steamUsername: string;
-  steamUrl: string;
-  id: string; // ?
-}
-
 @Service()
 export class BotService {
   client: Client;
